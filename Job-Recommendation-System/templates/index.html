@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Job Recommender</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: linear-gradient(to right, #667eea, #764ba2);
+            text-align: center;
+            color: white;
+        }
+        .container {
+            margin-top: 100px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            background: #ff7eb3;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #ff4e8a;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>AI Job Recommendation System 💼</h1>
+        <p>Upload your resume and get best job matches instantly</p>
+
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="resume" required>
+            <label>Select Job Role:</label><br>
+            <select name="role"
+            style="padding: 5px;
+            margin-bottom: 10px;">
+            <option value="data analyst">Data Analyst</option>
+        <option value="data scientist">Data Scientist</option>
+    <option value="web developer">Web Developer</option>
+            </select>
+            <br>
+            <button type="submit">Get Recommendations</button>
+        </form>
+    </div>
+</body>
+</html>
