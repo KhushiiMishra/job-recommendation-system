@@ -153,7 +153,6 @@ def upload_file():
         job_titles=job_titles,   # MUST
         job_scores=job_scores    # MUST
     )
-  
 # ✅ Run App
 if __name__ == '__main__':
     app.run(debug=True)
