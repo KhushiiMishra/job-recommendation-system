@@ -3,6 +3,9 @@
 <head>
     <title>Job Results</title>
 
+    <!-- Responsive -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -13,100 +16,148 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        body{
+        body {
             background: linear-gradient(135deg,#667eea,#764ba2);
-            color: #333;
+            font-family: 'Segoe UI', sans-serif;
         }
-        .main-container{
+
+        .main-container {
             background: white;
             border-radius: 20px;
             padding: 30px;
             margin-top: 30px;
             box-shadow: 0px 10px 30px rgba(0,0,0,0.2);
         }
-        .btn-apply{
+
+        /* Section Titles */
+        .section-title {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 30px;
+            color: white;
+            font-weight: bold;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            animation: float 2s ease-in-out infinite alternate;
+        }
+
+        .section-title:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .blue { background: linear-gradient(45deg, #36d1dc, #5b86e5); }
+        .green { background: linear-gradient(45deg, #00c9a7, #92fe9d); }
+        .purple { background: linear-gradient(45deg, #a18cd1, #fbc2eb); }
+
+        @keyframes float {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-5px); }
+        }
+
+        .skill-badge {
+            background: #007BFF;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            margin: 5px;
+            display: inline-block;
+        }
+
+        .btn-apply {
             background: linear-gradient(45deg,#36d1dc,#5b86e5);
             color: white;
             border-radius: 20px;
             padding: 8px 15px;
             text-decoration: none;
         }
-        .btn-apply:hover{
+
+        .btn-apply:hover {
             opacity: 0.8;
         }
+
+        /* Chatbot Effects */
+        .chat-alert {
+            animation: bounce 1s infinite;
+        }
+        @keyframes bounce {
+            0%,100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .card:hover{
+            transform: translateY(-5px);
+            transition: 0.3s;
+        }
     </style>
-    <meta name="viewport"content="width=device-width,initial-scale=1">
 </head>
 
-<body class="bg-light">
-    <div class="container">
-        <div class="main-container">          
-        </div>
-    </div>
+<body>
 
-<div class="container mt-5">
-    <div class="row"></div>
+<div class="container">
+    <div class="main-container">
+        <a href="/" class="btn btn-dark mb-3">_Back</a>
+        <h2 class="text-center text-primary fw-bold">🚀 AI Job Recommendations</h2>
 
-    <h2 class="text-center text-primary fw-bold">🚀 AI Job Recommendations</h2>
+        <h4 class="text-center">
+            ATS Score: <span class="text-success">{{ ats_score }}%</span>
+        </h4>
 
-    <h4 class="text-center">
-        ATS Score: <span class="text-success">{{ ats_score }}%</span>
-    </h4>
+        {% if ats_score < 30 %}
+            <p class="text-danger text-center">⚠ Improve your resume</p>
+        {% elif ats_score < 60 %}
+            <p class="text-warning text-center">👍 Good, but can improve</p>
+        {% else %}
+            <p class="text-success text-center">🔥 Excellent match!</p>
+        {% endif %}
 
-    {% if ats_score < 30 %}
-        <p class="text-danger text-center">⚠ Improve your resume</p>
-    {% elif ats_score < 60 %}
-        <p class="text-warning text-center">👍 Good, but can improve</p>
-    {% else %}
-        <p class="text-success text-center">🔥 Excellent match!</p>
-    {% endif %}
+        <div class="row">
 
-    <!-- Suggestions -->
-     <div class="col-md-4">
-    <h3 class="mt-4">📊 Suggestions</h3>
-    <ul>
-        {% for s in suggestions %}
-            <li>{{ s }}</li>
-        {% endfor %}
-    </ul>
+            <!-- LEFT -->
+            <div class="col-md-4">
+                <h3 class="section-title">📊 Suggestions</h3>
+                <ul>
+                    {% for s in suggestions %}
+                        <li>{{ s }}</li>
+                    {% endfor %}
+                </ul>
 
-    <!-- Skills -->
-    <h3 class="mt-4">🧠 Skills Detected</h3>
-    <div class="mb-4">
-        {% for skill in skills %}
-            <span class="skill-badge">{{ skill }}</span>
-        {% endfor %}</div>
-    </div>
-
-    <!-- Graph -->
-     <div class="col-md-8">
-     <div class="card p-3 mt-4 shadow-sm" style="height: 300px;">
-    <h3>📊 Job Match Graph</h3>
-    <canvas id="jobChart"></canvas>
-    </div>
-
-    <!-- Jobs -->
-    <h3 class="mt-4">💼 Recommended Jobs</h3>
-
-    {% for job, percent, link in jobs %}
-    <div class="card mb-4 p-4">
-
-        <h4 class="fw-bold"> {{ job }}</h4>
-
-        <p>Match Score: <b>{{ percent }}%</p>
-
-        <div class="progress mb-3" style="height: 8px;">
-            <div class="progress-bar bg-success" style="width: {{ percent }}%">
+                <h3 class="section-title blue">🧠 Skills Detected</h3>
+                <div>
+                    {% for skill in skills %}
+                        <span class="skill-badge">{{ skill }}</span>
+                    {% endfor %}
+                </div>
             </div>
+
+            <!-- RIGHT -->
+            <div class="col-md-8">
+
+                <h3 class="section-title green">📈 Job Match Graph</h3>
+                <div class="card p-3 mb-4" style="height:300px;">
+                    <canvas id="jobChart"></canvas>
+                </div>
+
+                <h3 class="section-title purple">💼 Recommended Jobs</h3>
+
+                {% for job, percent, link in jobs %}
+                <div class="card mb-4 p-4">
+                    <h5 class="fw-bold">{{ job }}</h5>
+
+                    <p>Match Score: <b>{{ percent }}%</b></p>
+
+                    <div class="progress mb-3" style="height:8px;">
+                        <div class="progress-bar bg-success" style="width: {{ percent }}%"></div>
+                    </div>
+
+                    <a href="{{ link }}" target="_blank" class="btn-apply">Apply Now 🚀</a>
+                </div>
+                {% endfor %}
+
+            </div>
+
         </div>
 
-        <a href="{{ link }}" target="_blank"
-        class="btn-apply">
-           Apply Now
-        </a>
-
-    </div>
-    {% endfor %}
     </div>
 </div>
 
@@ -124,12 +175,12 @@
             datasets: [{
                 label: 'Match %',
                 data: jobScores,
-                backgroundcolour:'rgba(54,162,235,0.6)'
+                backgroundColor: 'rgba(54,162,235,0.6)'
             }]
         },
         options: {
-            responsive:true,
-            maintainaspectratio:false,
+            responsive: true,
+            maintainAspectRatio: false,
             scales: {
                 y: {
                     beginAtZero: true,
@@ -141,8 +192,10 @@
 </script>
 
 <!-- Chatbot -->
+<div id="chat-bubble" style="position: fixed; bottom: 100px; right: 25px; background: red; color: white; padding: 8px 12px; border-radius: 50%; display:none;">!</div>
+
 <div style="position: fixed; bottom: 20px; right: 20px; width: 300px;">
-    <div class="card shadow">
+    <div id="chat-card" class="card shadow">
         <div class="card-header bg-primary text-white">AI Assistant</div>
 
         <div id="chatBox" style="height: 200px; overflow-y: auto; padding: 10px;"></div>
@@ -155,22 +208,32 @@
 </div>
 
 <script>
-function sendMessage() {
+function sendMessage(){
     let input = document.getElementById("userInput");
     let message = input.value;
+    let chatbox = document.getElementById("chatBox");
 
-    let chatBox = document.getElementById("chatBox");
+    chatbox.innerHTML += "<div><b>You:</b> " + message + "</div>";
 
-    chatBox.innerHTML += `<div><b>You:</b> ${message}</div>`;
+    // typing effect
+    let typing = "<div id='typing'>Bot is typing...</div>";
+    chatbox.innerHTML += typing;
 
-    let reply = "Improve your skills and projects.";
-
-    chatBox.innerHTML += `<div><b>Bot:</b> ${reply}</div>`;
+    setTimeout(() => {
+        document.getElementById("typing").remove();
+        chatbox.innerHTML += "<div><b>Bot:</b> Try adding more skills 🚀</div>";
+    }, 1000);
 
     input.value = "";
 }
+// Auto popup
+setTimeout(() => {
+    document.getElementById("chatBox").innerHTML += "<div><b>Bot:</b> 👋 Hi! Need help?</div>";
+    document.getElementById("chat-bubble").style.display = "block";
+    document.getElementById("chat-card").classList.add("chat-alert");
+}, 2000);
 </script>
-</div>
-</div>
+
+
 </body>
 </html>

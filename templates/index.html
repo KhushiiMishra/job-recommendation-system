@@ -50,26 +50,13 @@
         .section{
             padding: 60px 0;
         }
-       /* input, button {
-            padding: 10px;
-            margin: 10px;
-            border-radius: 5px;
-            border: none;
-        }
-        button {
-            background: #ff7eb3;
-            color: white;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #ff4e8a;
-        } */
+       
     </style>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
-        <a class="navbar-brand"href="#">Ai Job Reccommendar</a>
+        <a class="navbar-brand"href="#">Ai Job Recommendar</a>
         <div class="ms-auto">
             <a class="nav-link text-white de-inline" href="#">Home</a>
             <a class="nav-link text-white de-inline" href="#about">About</a>
@@ -85,7 +72,7 @@
      <!--about section-->
     <div id="About" class="container section text-center">
         <h2 class="fw-bold mb-3"> About AI Job Recommendation System 💼</h2>
-        <p class="text-muted">helps you analyze your resumr calculate ats score and get best job Upload your resume and get best job matches instantly</p>
+        <p class="text-muted">An AI-based system that analyzes resumes, calculate ATS scores, and recommends suitable job opportunities based on skills and profile.</p>
          <div class="row mt-4">
             <div class="col-md-3">
                 <div class="card p-3">
@@ -94,18 +81,18 @@
            </div>
            <div class="col-md-3">
             <div class="card p-3">
-                <h5>ATS sCORE</h5>
-            </div>
-           </div>
-           <div class="col-md-3">
-            <div class="card p-3">
-                <h5>Job Matching</h5>
+                <h5>ATS Score Calculation</h5>
             </div>
            </div>
            <div class="col-md-3">
             <div class="card p-3">
                 <h5>Skill Detection</h5>
-            </div>
+            </div> 
+           </div>
+           <div class="col-md-3">
+            <div class="card p-3">
+                <h5>Chatbot Assistance</h5>
+            </div> 
            </div>
          </div>
     </div>
@@ -113,6 +100,9 @@
     <div id="analyzer" class="container section">
         <div class="card p-5 text-center">
             <h3 class="fw-bold mb-3">AI Resume Analyzer</h3>
+            <div id="loader" style="display: none; text-align: center;">
+                <p> ⏳Analyzing Resume...</p>
+            </div>
             <form action="/upload" method="post" enctype="multipart/form-data">
                 <input type="file" name="resume" class="form-control mb-3" required>
                 <select name="role" class="form-control mb-3">
@@ -124,5 +114,10 @@
             </form>
         </div>
     </div>
+    <script>
+        document.querySelector("form").addEventListener("submit",function(){
+            document.getElementById("loader").style.display="block";
+        });
+    </script>
 </body>
 </html>

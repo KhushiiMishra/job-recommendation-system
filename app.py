@@ -67,7 +67,7 @@ def match_jobs(user_text, selected_role):
         score = int(similarity[i] * 100)
         job_title = str(jobs.iloc[i]['job_title']).lower()
 
-        if score > 10:
+        if score > 5:
             if selected_role == "all" or selected_role.lower() in job_title:
                 matched_jobs.append(
                     (
@@ -89,7 +89,17 @@ def match_jobs(user_text, selected_role):
     # ✅ Sort by score
     unique_jobs = sorted(unique_jobs, key=lambda x: x[1], reverse=True)
 
-    return unique_jobs[:10]
+    if len(unique_jobs)<5:
+        extra_jobs=[]
+        for i in range(min(5,len(jobs))):
+            extra_jobs.append((
+                jobs.iloc[i]['job_title'],
+                int(similarity[i]* 100),
+                jobs.iloc[i]['link']
+                )
+                              )
+            return unique_jobs+ extra_jobs
+        return unique_jobs[:10]
 
 # ✅ Upload Route
 @app.route('/upload', methods=['POST'])
