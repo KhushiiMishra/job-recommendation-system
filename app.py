@@ -1,11 +1,29 @@
 import os
+import sqlite3
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import PyPDF2
 import pandas as pd
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
+def init_db():
+    conn = sqlite3.connect("users.db")
+    cursor = conn.cursor()
+
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT,
+        email TEXT,
+        password TEXT
+    )
+    ''')
+
+    conn.commit()
+    conn.close()
+
+init_db()
 
 UPLOAD_FOLDER = "resumes"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -15,6 +33,50 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 @app.route('/')
 def home():
     return render_template('index.html')
+
+#signup route
+@app.route('/signup', methods=['GET','POST'])
+def signup():
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        password = request.form['password']
+
+        conn = sqlite3.connect("users.db")
+        cursor = conn.cursor()
+
+        cursor.execute("INSERT INTO users (username,email,password) VALUES (?,?,?)",
+                       (username,email,password))
+
+        conn.commit()
+        conn.close()
+
+        return redirect('/login')
+
+    return render_template('signup.html')
+
+#login route
+@app.route('/login', methods=['GET','POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+
+        conn = sqlite3.connect("users.db")
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * FROM users WHERE email=? AND password=?",
+                       (email,password))
+
+        user = cursor.fetchone()
+        conn.close()
+
+        if user:
+            return redirect('/')
+        else:
+            return "Invalid Credentials"
+
+    return render_template('login.html')
 
 
 # ✅ Extract text from PDF
