@@ -16,6 +16,9 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
+        .card{
+            transition: 0.3s;
+        }
         body {
             background: linear-gradient(135deg,#667eea,#764ba2);
             font-family: 'Segoe UI', sans-serif;
@@ -87,12 +90,25 @@
         }
         .card:hover{
             transform: translateY(-5px);
-            transition: 0.3s;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);;
         }
     </style>
 </head>
 
 <body>
+    <div id="chat-notification" style="
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    background: red;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 50%;
+    font-size: 12px;
+    display: none;
+    z-index: 999;">
+    1
+</div>
 
 <div class="container">
     <div class="main-container">
@@ -139,11 +155,32 @@
                 </div>
 
                 <h3 class="section-title purple">💼 Recommended Jobs</h3>
+                <!-- <h3 class="section-title green">🔥 Live Jobs (Scraped)</h3> -->
+
+                   {% for job, percent, link, original_link in scraped_jobs %}
+                    <div class="card mb-4 p-4">
+
+                     <h4>{{ job }} <span class="badge bg-danger">LIVE</span></h4>
+
+                    <p>Match Score: <b>{{ percent }}%</b></p>
+                     <div class="d-flex gap-2">
+        <a href="{{ link }}" target="_blank" class="btn btn-success">
+            Search Jobs 🔍
+        </a>
+
+        <a href="{{ original_link }}" target="_blank" class="btn btn-secondary">
+            View Details
+        </a>
+    </div>
+
+                     <a href="{{ link }}" target="_blank" class="btn btn-success"> Apply Now 🚀 </a>
+                    </div>
+                    {% endfor %}
 
                 {% for job, percent, link in jobs %}
                 <div class="card mb-4 p-4">
                     <h5 class="fw-bold">{{ job }}</h5>
-
+                    {% if percent > 70 %}<span class="badge bg-success">Top Match</span>{% endif %}
                     <p>Match Score: <b>{{ percent }}%</b></p>
 
                     <div class="progress mb-3" style="height:8px;">
@@ -206,34 +243,52 @@
         </div>
     </div>
 </div>
-
 <script>
 function sendMessage(){
-    let input = document.getElementById("userInput");
+    let input = document.getElementById("userInput");   // ✅ correct id
     let message = input.value;
-    let chatbox = document.getElementById("chatBox");
 
-    chatbox.innerHTML += "<div><b>You:</b> " + message + "</div>";
+    let chatbox = document.getElementById("chatBox");   // ✅ correct id
 
-    // typing effect
-    let typing = "<div id='typing'>Bot is typing...</div>";
-    chatbox.innerHTML += typing;
+    if(message.trim() === "") return;
 
-    setTimeout(() => {
-        document.getElementById("typing").remove();
-        chatbox.innerHTML += "<div><b>Bot:</b> Try adding more skills 🚀</div>";
-    }, 1000);
+    chatbox.innerHTML += `<div><b>You:</b> ${message}</div>`;
+
+    let reply = "Improve skills & projects 🚀";
+
+    if(message.toLowerCase().includes("skills")){
+        reply = "Try adding Python, SQL, and projects.";
+    }
+
+    chatbox.innerHTML += `<div><b>Bot:</b> ${reply}</div>`;
 
     input.value = "";
+
+    // auto scroll
+    chatbox.scrollTop = chatbox.scrollHeight;
 }
-// Auto popup
+</script>
+<script>
+document.getElementById("userInput").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+        sendMessage();
+    }
+});
+</script>
+</body>
+<script>
 setTimeout(() => {
-    document.getElementById("chatBox").innerHTML += "<div><b>Bot:</b> 👋 Hi! Need help?</div>";
-    document.getElementById("chat-bubble").style.display = "block";
-    document.getElementById("chat-card").classList.add("chat-alert");
+    let notif = document.getElementById("chat-notification");
+    let chatbox = document.getElementById("chatBox");
+
+    // show notification
+    if (notif) notif.style.display = "block";
+
+    // bot auto message
+    if (chatbox) {
+        chatbox.innerHTML += `<div><b>Bot:</b> 👋 Hi! Need help improving your resume?</div>`;
+    }
+
 }, 2000);
 </script>
-
-
-</body>
 </html>

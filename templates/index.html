@@ -3,12 +3,42 @@
 <head>
     <title>AI Job Recommender</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"rel="stylesheet">
-    <a href="/login">Login</a>
-    <a href="/signup">Signup</a>
+
+    <div class="d-flex justify-content-end gap-3 mb-3">
+    <a href="/login" class="auth-btn login-btn">Login</a>
+    <a href="/signup" class="auth-btn signup-btn">Signup</a>
+    </div>
     <style>
-        .html{
-            scroll-behavior: smooth;
-        }
+        button {
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: translateY(-3px);
+}
+        .auth-btn {
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    border: none;
+    transition: 0.3s;
+}
+
+.login-btn {
+    background: linear-gradient(45deg, #36d1dc, #5b86e5);
+    color: white;
+}
+
+.signup-btn {
+    background: linear-gradient(45deg, #ff7e5f, #feb47b);
+    color: white;
+}
+
+.auth-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+        
         body {
             font-family: 'Segon UI', sans-serif;
             margin: 0;
@@ -52,18 +82,27 @@
         .section{
             padding: 60px 0;
         }
+        body{
+            background: linear-gradient(135deg,#667eea,#764ba2);
+        }
+        html{
+            scroll-behavior: smooth;
+        }
        
     </style>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
-        <a class="navbar-brand"href="#">Ai Job Recommendar</a>
-        <div class="ms-auto">
-            <a class="nav-link text-white de-inline" href="#">Home</a>
-            <a class="nav-link text-white de-inline" href="#about">About</a>
-            <a class="nav-link text-white de-inline" href="#analyzer">Analyzer</a>
-        </div>
+    <nav class="navbar navbar-dark bg-dark px-3">
+    
+    <!-- LEFT -->
+    <span class="navbar-brand">AI Job Recommender</span>
+
+    <!-- CENTER BUTTONS -->
+    <div>
+        <a href="#about" class="btn btn-outline-light me-2">About</a>
+        <a href="#analyzer" class="btn btn-outline-success">Analyzer</a>
+    </div>
     </nav>
     <!-- hero section -->
      <div class="hero">
@@ -106,20 +145,41 @@
                 <p> ⏳Analyzing Resume...</p>
             </div>
             <form action="/upload" method="post" enctype="multipart/form-data">
+                <button type="submit" class="btn btn-primary" onclick="showLoader()">Analyze Resume</button>
+
+               <div id="loader" style="display:none; margin-top:10px;">Processing... ⏳
+               </div>
                 <input type="file" name="resume" class="form-control mb-3" required>
-                <select name="role" class="form-control mb-3">
-                    <option value="all">All Roles</option>
-                    <option value="data">Data</option>
-                    <option value="developer">Developer</option>
-                </select>
                 <button class="btn btn-primary w-100 py-2 fw-bold">Upload & Analyze</button>
+                <select name="role" class="form-select mb-3">
+    <option value="all">All Roles</option>
+    <option value="data">Data Analyst</option>
+    <option value="python">Python Developer</option>
+    <option value="web">Web Developer</option>
+    <option value="ml">Machine Learning</option>
+</select>
             </form>
         </div>
     </div>
+
     <script>
-        document.querySelector("form").addEventListener("submit",function(){
-            document.getElementById("loader").style.display="block";
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener("click", function(e) {
+        e.preventDefault();
+
+        const target = document.querySelector(this.getAttribute("href"));
+
+        window.scrollTo({
+            top: target.offsetTop - 60,  // navbar height adjust
+            behavior: "smooth"
         });
-    </script>
+    });
+});
+</script>
+    <script>
+    function showLoader() {
+    document.getElementById("loader").style.display = "block";
+                        }
+</script>
 </body>
 </html>

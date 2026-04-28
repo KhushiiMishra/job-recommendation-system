@@ -28,6 +28,35 @@ init_db()
 UPLOAD_FOLDER = "resumes"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+#web scrap
+import requests
+from bs4 import BeautifulSoup
+
+def scrape_jobs(selected_role):
+    import requests
+    from bs4 import BeautifulSoup
+
+    url = "https://realpython.github.io/fake-jobs/"
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    jobs = []
+    job_cards = soup.find_all('div', class_='card-content')
+
+    for job in job_cards:
+        title = job.find('h2').text.strip()
+
+        score = len(title) % 100
+
+        if selected_role.lower() == "all" or selected_role.lower() in title.lower():
+
+            google_link = "https://www.google.com/search?q=" + title.replace(" ", "+") + "+jobs"
+            original_link = job.find('a')['href']
+
+            # ✅ ALWAYS 4 VALUES
+            jobs.append((title, score, google_link, original_link))
+
+    return jobs[:5]
 
 # ✅ Home Route
 @app.route('/')
@@ -182,7 +211,11 @@ def upload_file():
 
     resume_text = extract_text_from_pdf(filepath)
     skills = extract_skills(resume_text)
+    
     jobs = match_jobs(resume_text, selected_role)
+    scraped_jobs=scrape_jobs(selected_role)
+    
+    
 
     # ✅ ATS Score
     if jobs:
@@ -223,8 +256,10 @@ def upload_file():
         ats_score=ats_score,
         suggestions=suggestions,
         job_titles=job_titles,   # MUST
-        job_scores=job_scores    # MUST
+        job_scores=job_scores,   # MUST
+        scraped_jobs=scraped_jobs
     )
+    
 # ✅ Run App
 if __name__ == '__main__':
     app.run(debug=True)
