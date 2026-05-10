@@ -7,8 +7,30 @@
     <div class="d-flex justify-content-end gap-3 mb-3">
     <a href="/login" class="auth-btn login-btn">Login</a>
     <a href="/signup" class="auth-btn signup-btn">Signup</a>
+    <button onclick="toggleMode()" class="btn btn-dark ms-2">
+    🌙
+    </button>
     </div>
     <style>
+        .dark-mode {
+    background: #121212 !important;
+    color: white !important;
+}
+
+.dark-mode .card,
+.dark-mode .navbar,
+.dark-mode .main-container {
+    background: #1e1e1e !important;
+    color: white !important;
+}
+
+.dark-mode input,
+.dark-mode select,
+.dark-mode textarea {
+    background: #2c2c2c !important;
+    color: white !important;
+    border: 1px solid #555;
+}
         button {
     transition: 0.3s;
 }
@@ -182,4 +204,9 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                         }
 </script>
 </body>
+<script>
+function toggleMode() {
+    document.body.classList.toggle("dark-mode");
+}
+</script>
 </html>
