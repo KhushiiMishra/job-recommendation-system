@@ -7,6 +7,8 @@ import pandas as pd
 from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
+UPLOAD_FOLDER="uploads"
+app.config['UPLOAD_FOLDER']=UPLOAD_FOLDER
 def init_db():
     conn = sqlite3.connect("users.db")
     cursor = conn.cursor()
@@ -193,7 +195,7 @@ def match_jobs(user_text, selected_role):
         return unique_jobs[:10]
 
 # ✅ Upload Route
-@app.route('/upload', methods=['POST'])
+@app.route('/upload', methods=['GET','POST'])
 def upload_file():
 
     if 'resume' not in request.files:
@@ -207,6 +209,7 @@ def upload_file():
     selected_role = request.form.get("role", "all")
 
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+    filepath=os.path.join(app.config['UPLOAD_FOLDER'],file.filename)
     file.save(filepath)
 
     resume_text = extract_text_from_pdf(filepath)
