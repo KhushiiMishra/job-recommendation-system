@@ -217,6 +217,12 @@ def upload_file():
     
     jobs = match_jobs(resume_text, selected_role)
     scraped_jobs=scrape_jobs(selected_role)
+    return render_template(
+        "result.html",
+        jobs=jobs,
+        scraped_jobs=scraped_jobs,
+        skills=skills
+    )
     
 #recriuter
 @app.route('/recruiter')
