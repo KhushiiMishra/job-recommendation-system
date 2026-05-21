@@ -25,7 +25,7 @@
         }
 
         .main-container {
-            background: white;
+            background: linear-gradient(135deg,#667eea,#764ba2);
             border-radius: 20px;
             padding: 30px;
             margin-top: 30px;
@@ -79,6 +79,25 @@
         .btn-apply:hover {
             opacity: 0.8;
         }
+        .col-md-4{
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    color: #222;
+    box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
+}
+
+.col-md-4 h3,
+.col-md-4 h4{
+    color: #111;
+    font-weight: bold;
+}
+
+.col-md-4 li{
+    color: #222;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
 
         /* Chatbot Effects */
         .chat-alert {
@@ -113,10 +132,10 @@
 <div class="container">
     <div class="main-container">
         <a href="/" class="btn btn-dark mb-3">_Back</a>
-        <h2 class="text-center text-primary fw-bold">🚀 AI Job Recommendations</h2>
+        <h2 class="text-center fw-bold text white">🚀 Smart Career Ai</h2>
 
         <h4 class="text-center">
-            ATS Score: <span class="text-success">{{ ats_score }}%</span>
+            ATS Score: <span style="color: white;font-size: 36px; font-weight: bold;">{{ ats_score }}%</span>
         </h4>
 
         {% if ats_score < 30 %}
@@ -131,10 +150,10 @@
 
             <!-- LEFT -->
             <div class="col-md-4">
-                <h3 class="section-title">📊 Suggestions</h3>
+                <h3>📊 Suggestions</h3>
                 <ul>
-                    {% for s in suggestions %}
-                        <li>{{ s }}</li>
+                    {% for suggestion in suggestions %}
+                        <li>{{ suggestion}}</li>
                     {% endfor %}
                 </ul>
 
